@@ -1,38 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Spinner } from "reactstrap";
 import "./App.css";
-import Header from "./Layouts/Header";
-import Main from "./Layouts/Main";
-import Footer from "./Layouts/Footer";
-import fakeData from "./sahte-veri";
+import Main from "./layout/Main";
 import axios from "axios";
+import SahteVeri from "./Sahte_veri";
+import Pick from "./layout/Pick";
 
 function App() {
   const dateNow = new Date();
-
-  const [data, setData] = useState(fakeData);
+  const [data, setData] = useState(SahteVeri);
   const [date, setDate] = useState(dateNow.toISOString().slice(0, 10));
-  console.log(data);
+  const [random, setRandom] = useState(false);
+
   useEffect(() => {
     setData(null);
-    setTimeout(() => {
-      axios
-        .get(
-          `https://api.nasa.gov/planetary/apod?api_key=AOrjOCj81fYxcoA76fqynX0vrTSVBLf6Qt8U8gsO&date=${date}`
-        )
-        .then((res) => setData(res.data));
-    }, 2000);
-  }, [date]);
-
+    const dataUrl = random
+      ? `https:api.nasa.gov/planetary/apod?api_key=DEMO_KEY&count=3`
+      : `https:api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${date}`;
+    axios.get(dataUrl).then((resolve) => {
+      //console.log("sonuç:",resolve.data);
+      setData(resolve.data);
+    });
+  }, [date, random]);
+  console.log(data);
   return (
     <div className="App">
-      <Header date={date} setDate={setDate} />
-      {data ? (
-        <Main data={data} />
+      {random ? (
+        <Pick items={data} />
       ) : (
-        <Spinner className="m-auto">Loading...</Spinner>
+        <Main setRandom={setRandom} date={date} setDate={setDate} data={data} />
       )}
-      <Footer />
     </div>
   );
 }
