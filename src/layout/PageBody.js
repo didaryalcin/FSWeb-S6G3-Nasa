@@ -17,7 +17,7 @@ const Container = styled.div`
 `;
 const Title = styled.h2`
   text-align: center;
-  color: ${(props) => (props.type === "video" ? "red" : "green")};
+  color: ${(props) => (props.type === "video" ? "rgb(3, 51, 23);" : "red")};
 `;
 const DateAndCopyright = styled.div`
   display: flex;
